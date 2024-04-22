@@ -1,20 +1,21 @@
 package com.example.medClinic.user.controller;
 
 
+import com.example.medClinic.user.dto.request.EditUserRequest;
 import com.example.medClinic.user.dto.request.RegistrationUserRequest;
 import com.example.medClinic.user.dto.response.UserResponse;
 import com.example.medClinic.user.entity.UserEntity;
 import com.example.medClinic.user.exceptions.BadRequestException;
 import com.example.medClinic.user.exceptions.UserAlreadyExistException;
+import com.example.medClinic.user.exceptions.UserNotFoundException;
 import com.example.medClinic.user.repository.UserRepository;
 import com.example.medClinic.user.routes.UserRoutes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -66,4 +67,37 @@ public class UserApiController {
         user = userRepository.save(user);
         return UserResponse.of(user);
     }
+
+    @PostMapping(UserRoutes.CLIENT)
+    public UserResponse fillUserProfileData(@RequestBody EditUserRequest request) throws BadRequestException {
+        request.validate();
+
+        UserEntity user = UserEntity.builder()
+                .firstname(request.getFirstName())
+                .lastname(request.getLastName())
+                .passportNumber(request.getPassportNumber())
+                .snils(request.getSnils())
+                .anamnesis(request.getAnamnesis())
+                .build();
+        user = userRepository.save(user);
+        return UserResponse.of(user);
+    }
+
+    @GetMapping(UserRoutes.BY_ID)
+    public  UserResponse byId(@PathVariable Long id) throws UserNotFoundException {
+        return userRepository
+                .findById(id)
+                .map(UserResponse::of)
+                .orElseThrow(UserNotFoundException::new);
+
+    }
+
+    @DeleteMapping(UserRoutes.BY_ID)
+    public String delete(@PathVariable Long id) {
+        userRepository.deleteById(id);
+        return HttpStatus.OK.name();
+    }
+
+
+
 }
