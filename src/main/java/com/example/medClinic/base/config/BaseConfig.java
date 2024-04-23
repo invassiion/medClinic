@@ -2,7 +2,7 @@ package com.example.medClinic.base.config;
 
 
 import com.example.medClinic.base.routes.BaseRoutes;
-import com.example.medClinic.user.service.UserAuthService;
+import com.example.medClinic.user.service.ClientAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class BaseConfig {
     @Autowired
-    private UserAuthService userAuthService;
+    private ClientAuthService userAuthService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {

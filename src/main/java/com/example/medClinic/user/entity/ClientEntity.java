@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Entity
 @Table(name = "users")
-public class UserEntity {
+public class ClientEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
@@ -22,6 +22,8 @@ public class UserEntity {
     protected String firstname;
     @Column(name = "last_name")
     protected String lastname;
+
+    protected String secondName;
 
     protected String email;
 

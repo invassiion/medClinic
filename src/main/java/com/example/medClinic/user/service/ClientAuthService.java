@@ -1,7 +1,7 @@
 package com.example.medClinic.user.service;
 
-import com.example.medClinic.user.entity.UserEntity;
-import com.example.medClinic.user.repository.UserRepository;
+import com.example.medClinic.user.entity.ClientEntity;
+import com.example.medClinic.user.repository.ClientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,16 +15,16 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Component
-public class UserAuthService implements UserDetailsService {
-    private final UserRepository userRepository;
+public class ClientAuthService implements UserDetailsService {
+    private final ClientRepository userRepository;
 
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<UserEntity> userEntityOptional = userRepository.findByEmail(email);
+        Optional<ClientEntity> userEntityOptional = userRepository.findByEmail(email);
         if (userEntityOptional.isEmpty()) throw new UsernameNotFoundException("User with this email not found");
 
-        UserEntity user = userEntityOptional.get();
+        ClientEntity user = userEntityOptional.get();
         List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("user"));
 
         return new User(user.getEmail(), user.getPassword(),authorities);
